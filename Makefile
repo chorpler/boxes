@@ -50,7 +50,7 @@ win32: infomsg replaceinfos
 	    LEX=../$(WIN_FLEX_BISON_DIR)/win_flex.exe YACC=../$(WIN_FLEX_BISON_DIR)/win_bison.exe build
 
 win32.debug: infomsg replaceinfos
-	$(MAKE) -C src BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src LDFLAGS=-L../$(PCRE2_DIR)/.libs \
+	$(MAKE) -C src BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src:/mingw/include/ncurses LDFLAGS="-L../$(PCRE2_DIR)/.libs -L/mingw/lib" \
 	    LEX=../$(WIN_FLEX_BISON_DIR)/win_flex.exe YACC=../$(WIN_FLEX_BISON_DIR)/win_bison.exe debug
 
 win32.prereq: $(PCRE2_DIR)/.libs/libpcre2-32.a vendor/win_flex_bison-$(WIN_FLEX_BISON_VERSION).zip \
@@ -186,6 +186,9 @@ covtest:
 
 utest:
 	$(MAKE) -C utest BOXES_PLATFORM=unix utest
+
+debugutest:
+	$(MAKE) -C utest BOXES_PLATFORM=unix debugutest
 
 win32.utest: $(OUT_DIR)
 	cp $(WIN_CMOCKA_DIR)/bin/cmocka.dll $(OUT_DIR)/
