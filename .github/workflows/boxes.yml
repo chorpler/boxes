@@ -45,3 +45,22 @@ jobs:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   file: out/lcov-total.info
                   format: lcov
+
+    build-mac:
+        runs-on: macos-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: add-packages
+              run: |
+                  brew update
+                  brew install git flex bison libunistring pcre2 ncurses diffutils vim lcov cmocka
+
+            - name: make cov
+              run: make cov
+
+            - name: Run white-box tests
+              run: make utest
+
+            - name: Run black-box tests
+              run: make covtest
