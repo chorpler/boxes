@@ -81,9 +81,6 @@ void btrim(char *text, size_t *len);
 void btrim32(uint32_t *text, size_t *len);
 
 
-char *my_strnrstr(const char *s1, const char *s2, const size_t s2_len, int skip);
-
-
 /**
  * Calculates the length (in bytes) of the segment at the end of `s` which consists entirely of bytes in `accept`.
  * This is like `strspn()`, but from the end of the string.
@@ -108,9 +105,6 @@ int strisno(const char *s);
  * @return a new string, for which new memory was allocated
  */
 char *concat_strings_alloc(size_t count, ...);
-
-
-void concat_strings(char *dst, int max_len, int count, ...);
 
 
 /**
@@ -201,7 +195,7 @@ int tag_is_valid(char *tag);
 
 /**
  * Duplicate at most `n` bytes from the given string `s`.  Memory for the new string is obtained with `malloc()`, and
- * can be freed with `free()`. A terminating null byte is added. We include this implementation because the libc's 
+ * can be freed with `free()`. A terminating null byte is added. We include this implementation because the libc's
  * `strndup()` is not consistently available across all platforms.
  * @param s a string
  * @param n maximum number of characters to copy (excluding the null byte)
