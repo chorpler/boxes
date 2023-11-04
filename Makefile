@@ -50,7 +50,7 @@ win32: infomsg replaceinfos
 	    LEX=../$(WIN_FLEX_BISON_DIR)/win_flex.exe YACC=../$(WIN_FLEX_BISON_DIR)/win_bison.exe build
 
 win32.debug: infomsg replaceinfos
-	$(MAKE) -C src BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src:/mingw/include/ncurses LDFLAGS="-L../$(PCRE2_DIR)/.libs -L/mingw/lib" \
+	$(MAKE) -C src BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src LDFLAGS=-L../$(PCRE2_DIR)/.libs \
 	    LEX=../$(WIN_FLEX_BISON_DIR)/win_flex.exe YACC=../$(WIN_FLEX_BISON_DIR)/win_bison.exe debug
 
 win32.prereq: $(PCRE2_DIR)/.libs/libpcre2-32.a vendor/win_flex_bison-$(WIN_FLEX_BISON_VERSION).zip \
@@ -114,13 +114,14 @@ $(LIBUNISTRING_DIR)/lib/.libs/libunistring.a: vendor/libunistring-$(LIBUNISTRING
 	cd $(LIBUNISTRING_DIR) ; ./configure --enable-static ; $(MAKE)
 
 vendor/libncurses-$(LIBNCURSES_VERSION).tar.gz: | vendor
-	curl -L http://invisible-mirror.net/archives/ncurses/ncurses-$(LIBNCURSES_VERSION).tar.gz --output $@
+	curl -L https://invisible-mirror.net/archives/ncurses/ncurses-$(LIBNCURSES_VERSION).tar.gz --output $@
 
 $(LIBNCURSES_DIR)/lib/libncurses.a: vendor/libncurses-$(LIBNCURSES_VERSION).tar.gz
 	tar -C vendor -xzf vendor/libncurses-$(LIBNCURSES_VERSION).tar.gz
 	cd $(LIBNCURSES_DIR) ; ./configure --enable-static ; $(MAKE)
 
-static: infomsg replaceinfos $(LIBUNISTRING_DIR)/lib/.libs/libunistring.a $(PCRE2_DIR)/.libs/libpcre2-32.a $(LIBNCURSES_DIR)/lib/libncurses.a
+static: infomsg replaceinfos $(LIBUNISTRING_DIR)/lib/.libs/libunistring.a $(PCRE2_DIR)/.libs/libpcre2-32.a \
+        $(LIBNCURSES_DIR)/lib/libncurses.a
 	$(MAKE) -C src BOXES_PLATFORM=static LEX=flex YACC=bison LIBUNISTRING_DIR=$(LIBUNISTRING_DIR) PCRE2_DIR=$(PCRE2_DIR) LIBNCURSES_DIR=$(LIBNCURSES_DIR) $@
 
 
