@@ -94,7 +94,7 @@ flags_win32:
 	$(eval CFLAGS := -Os -s -m32 -I. -I$(SRC_DIR) -Wall -W $(CFLAGS_ADDTL))
 	$(eval LDFLAGS := $(LDFLAGS) -s -m32 $(LDFLAGS_ADDTL))
 	$(eval BOXES_EXECUTABLE_NAME := boxes.exe)
-	$(eval ALL_OBJ := $(GEN_SRC:.c=.o) $(ORIG_NORM:.c=.o) getopt.o)
+	$(eval ALL_OBJ := $(GEN_SRC:.c=.o) $(ORIG_NORM:.c=.o))
 	echo $(filter-out boxes.o,$(ALL_OBJ)) > $(OUT_DIR)/modules.txt
 
 flags_:
@@ -113,7 +113,6 @@ cmdline.o:   cmdline.c cmdline.h boxes.h discovery.h query.h tools.h config.h | 
 detect.o:    detect.c detect.h boxes.h bxstring.h shape.h tools.h config.h | check_dir
 discovery.o: discovery.c discovery.h boxes.h tools.h unicode.h config.h | check_dir
 generate.o:  generate.c generate.h boxes.h shape.h tools.h unicode.h config.h | check_dir
-getopt.o:    misc/getopt.c misc/getopt.h | check_dir
 input.o:     input.c boxes.h input.h regulex.h tools.h unicode.h config.h | check_dir
 lex.yy.o:    lex.yy.c parser.h boxes.h parsing.h tools.h shape.h unicode.h config.h | check_dir
 list.o:      list.c list.h boxes.h bxstring.h parsing.h query.h tools.h unicode.h config.h | check_dir
