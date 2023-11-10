@@ -1089,7 +1089,7 @@ void output_input(const int trim_only)
             indentspc[ntabs + nspcs] = '\0';
         }
         else if (opt.tabexp == 'k') {
-            indentspc = tabbify_indent(j, NULL, input.indent);
+            indentspc = u32_strconv_to_output(tabbify_indent(j, NULL, input.indent));
             indent = input.indent;
         }
         else {
