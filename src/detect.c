@@ -384,19 +384,20 @@ static size_t find_horizontal_shape(design_t *current_design, comparison_t comp_
         }
 
         uint32_t *shape_relevant = prepare_comp_shape(current_design, hshape, j, comp_type, 0, 0);
+            /* TODO trim if blank_leftward/rightward */
         size_t length_relevant = u32_strlen(shape_relevant);
 
         for (size_t k = 0; k < current_design->shape[hshape].height; ++k) {
-            size_t a = k;
+            size_t line_idx = k;
             if (hshape >= SSE && hshape <= SSW) {
-                a += input.num_lines - current_design->shape[hshape].height;
+                line_idx += input.num_lines - current_design->shape[hshape].height;
             }
-            if (a >= input.num_lines) {
+            if (line_idx >= input.num_lines) {
                 break;
             }
 
-            uint32_t *input_relevant = prepare_comp_input(a, 1, comp_type, 0, NULL, NULL);
-                                       /* CHECK this eats blank NW corners */
+            uint32_t *input_relevant = prepare_comp_input(line_idx, 1, comp_type, 0, NULL, NULL);
+                                       /* CHECK this eats blank NW corners --> probably fine */
             uint32_t *p = u32_strstr(input_relevant, shape_relevant);
             if (p) {
                 if (current_design->shape[hshape].elastic) {

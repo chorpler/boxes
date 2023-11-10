@@ -50,10 +50,20 @@ typedef struct {
     bxstr_t **mbcs;
     size_t    height;
     size_t    width;
-    int       elastic;          /* elastic is used only in original definition */
+
+    /** elastic is used only in original definition */
+    int       elastic;
+
+    /** For each shape line 0..height, a flag which is 1 if all shapes to the left of this shape are blank on the same
+     *  shape line. Always 1 if the shape is part of the left (west) box side. */
+    int      *blank_leftward;
+
+    /** For each shape line 0..height, a flag which is 1 if all shapes to the right of this shape are blank on the same
+     *  shape line. Always 1 if the shape is part of the right (east) box side. */
+    int      *blank_rightward;
 } sentry_t;
 
-#define SENTRY_INITIALIZER (sentry_t) {NULL, NULL, 0, 0, 0}
+#define SENTRY_INITIALIZER (sentry_t) {NULL, NULL, 0, 0, 0, NULL, NULL}
 
 
 
