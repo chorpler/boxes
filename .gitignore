@@ -61,6 +61,8 @@ CMakeUserPresets.json
 
 # Misc
 /vs
+/.vscode
+/.history
 
 # CMake / Conan
 build/
