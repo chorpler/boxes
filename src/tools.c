@@ -37,10 +37,10 @@
 #include "tools.h"
 #include "unicode.h"
 
-
-
 static pcre2_code *pattern_ascii_id = NULL;
 static pcre2_code *pattern_ascii_id_strict = NULL;
+
+bx_fprintf_t bx_fprintf_ptr = bx_fprintf;
 
 
 static pcre2_code *get_pattern_ascii_id(int strict)
@@ -704,7 +704,6 @@ char *bx_strndup(const char *s, size_t n)
 }
 
 
-
 void bx_fprintf(FILE *stream, const char *format, ...)
 {
     va_list va;
@@ -712,7 +711,6 @@ void bx_fprintf(FILE *stream, const char *format, ...)
     vfprintf(stream, format, va);
     va_end(va);
 }
-
 
 
 FILE *bx_fopens(bxstr_t *pathname, char *mode)
@@ -732,6 +730,14 @@ FILE *bx_fopen(char *pathname, char *mode)
     // TODO Windows
     return f;
 }
+
+/**
+ * Set the bx_fprintf_ptr function pointer to point to the specified function
+ */
+void set_bx_fprintf(bx_fprintf_t func_to_use) {
+    bx_fprintf_ptr = func_to_use;
+}
+
 
 
 /* vim: set sw=4: */

@@ -149,7 +149,8 @@ uint32_t *prepare_comp_shape(
 {
     sentry_t shape_def = design->shape[shape];
     if (shape_line_idx >= shape_def.height) {
-        bx_fprintf(stderr, "%s: prepare_comp_shape(\"%s\", %s, %d, %s, %d, %d): Index out of bounds\n", PROJECT,
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: prepare_comp_shape(\"%s\", %s, %d, %s, %d, %d): Index out of bounds\n", PROJECT,
                 design->name, shape, (int) shape_line_idx, comparison_name[comp_type], trim_left, trim_right);
         return NULL;
     }
@@ -190,7 +191,8 @@ uint32_t *prepare_comp_input(size_t input_line_idx, int trim_left, comparison_t 
                 trim_left ? "true" : "false", comparison_name[comp_type], (int) offset_right, out_indent, out_trailing);
     #endif
     if (input_line_idx >= input.num_lines) {
-        bx_fprintf(stderr, "%s: prepare_comp_input(%d, %d, %s, %d): Index out of bounds\n", PROJECT,
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: prepare_comp_input(%d, %d, %s, %d): Index out of bounds\n", PROJECT,
                 (int) input_line_idx, trim_left, comparison_name[comp_type], (int) offset_right);
         #ifdef DEBUG
             fprintf(stderr, " -> (null)\n");

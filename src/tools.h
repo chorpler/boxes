@@ -249,6 +249,17 @@ FILE *bx_fopens(bxstr_t *pathname, char *mode);
  */
 FILE *bx_fopen(char *pathname, char *mode);
 
+typedef void (*bx_fprintf_t)(FILE *stream, const char *format, ...);
+
+extern bx_fprintf_t bx_fprintf_ptr;
+
+/**
+ * Set the bx_fprintf_ptr function pointer to point to the specified function
+ */
+void set_bx_fprintf(bx_fprintf_t func_to_use);
+
+
+
 
 #endif
 

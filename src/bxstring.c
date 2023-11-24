@@ -35,7 +35,8 @@
 bxstr_t *bxs_from_ascii(char *pAscii)
 {
     if (pAscii == NULL) {
-        bx_fprintf(stderr, "%s: internal error: from_ascii() called with NULL\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: internal error: from_ascii() called with NULL\n", PROJECT);
         return NULL;
     }
 
@@ -50,7 +51,8 @@ bxstr_t *bxs_from_ascii(char *pAscii)
     size_t error_pos = 0;
     if (!bxs_valid_anywhere(result, &error_pos)) {
         ucs4_t c = result->memory[error_pos];
-        bx_fprintf(stderr, "%s: illegal character '%lc' (%#010x) encountered in string\n", PROJECT, c, (int) c);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: illegal character '%lc' (%#010x) encountered in string\n", PROJECT, c, (int) c);
         bxs_free(result);
         return NULL;
     }
@@ -83,7 +85,8 @@ bxstr_t *bxs_from_ascii(char *pAscii)
 bxstr_t *bxs_from_unicode(uint32_t *pInput)
 {
     if (pInput == NULL) {
-        bx_fprintf(stderr, "%s: internal error: bxs_from_unicode() called with NULL\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: internal error: bxs_from_unicode() called with NULL\n", PROJECT);
         return NULL;
     }
 
@@ -113,7 +116,8 @@ bxstr_t *bxs_from_unicode(uint32_t *pInput)
         }
 
         if (!is_allowed_anywhere(c)) { /* currently used for config only, reconsider when using on input data */
-            bx_fprintf(stderr, "%s: illegal character '%lc' (%#010x) encountered in string\n", PROJECT, c, (int) c);
+            // Instead of bx_fprintf, use function pointer
+            bx_fprintf_ptr(stderr, "%s: illegal character '%lc' (%#010x) encountered in string\n", PROJECT, c, (int) c);
             bxs_free(result);
             return NULL;
         }
@@ -220,15 +224,18 @@ bxstr_t *bxs_trimdup(bxstr_t *pString, size_t start_idx, size_t end_idx)
     }
     if (start_idx > pString->num_chars_visible) {
         /* a start_idx on the terminating NUL is a valid input */
-        bx_fprintf(stderr, "%s: internal error: start_idx out of bounds in bxs_trimdup()\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: internal error: start_idx out of bounds in bxs_trimdup()\n", PROJECT);
         return NULL;
     }
     if (end_idx > pString->num_chars_visible) {
-        bx_fprintf(stderr, "%s: internal error: end_idx out of bounds in bxs_trimdup()\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: internal error: end_idx out of bounds in bxs_trimdup()\n", PROJECT);
         return NULL;
     }
     if (end_idx < start_idx) {
-        bx_fprintf(stderr, "%s: internal error: end_idx before start_idx in bxs_trimdup()\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: internal error: end_idx before start_idx in bxs_trimdup()\n", PROJECT);
         return NULL;
     }
 
@@ -266,7 +273,8 @@ bxstr_t *bxs_substr(bxstr_t *pString, size_t start_idx, size_t end_idx)
         end_idx = pString->num_chars;
     }
     if (end_idx < start_idx) {
-        bx_fprintf(stderr, "%s: internal error: end_idx before start_idx in bxs_substr()\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: internal error: end_idx before start_idx in bxs_substr()\n", PROJECT);
         return NULL;
     }
 

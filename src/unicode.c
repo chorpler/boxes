@@ -292,7 +292,8 @@ char *to_utf8(uint32_t *src)
     }
     char *result = u32_strconv_to_encoding(src, "UTF-8", iconveh_error);
     if (result == NULL) {
-        bx_fprintf(stderr, "%s: failed to convert a string to UTF-8: %s\n", PROJECT, strerror(errno));
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: failed to convert a string to UTF-8: %s\n", PROJECT, strerror(errno));
         return NULL;
     }
     return result;

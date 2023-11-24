@@ -65,8 +65,10 @@ extern int optind;     /* for getopt() */
  */
 static void usage_short(FILE *st)
 {
-    bx_fprintf(st, "Usage: %s [options] [infile [outfile]]\n", PROJECT);
-    bx_fprintf(st, "Try `%s -h' for more information.\n", PROJECT);
+    // Instead of bx_fprintf, use function pointer
+    bx_fprintf_ptr(st, "Usage: %s [options] [infile [outfile]]\n", PROJECT);
+    // Instead of bx_fprintf, use function pointer
+    bx_fprintf_ptr(st, "Try `%s -h' for more information.\n", PROJECT);
 }
 
 
@@ -213,7 +215,8 @@ static int alignment(opt_t *result, char *optarg)
     }
 
     if (errfl) {
-        bx_fprintf(stderr, "%s: Illegal text format -- %s\n", PROJECT, optarg);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: Illegal text format -- %s\n", PROJECT, optarg);
         return 1;
     }
     return 0;
@@ -230,7 +233,8 @@ static int alignment(opt_t *result, char *optarg)
 static int command_line_design(opt_t *result, char *optarg)
 {
     if (strlen(optarg) == 0) {
-        bx_fprintf(stderr, "%s: empty command line design definition\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: empty command line design definition\n", PROJECT);
         return 2;
     }
     result->cld = (char *) strdup(optarg);
@@ -283,7 +287,8 @@ static int eol_override(opt_t *result, char *optarg)
         result->eol = "\r";
     }
     else {
-        bx_fprintf(stderr, "%s: invalid eol spec -- %s\n", PROJECT, optarg);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: invalid eol spec -- %s\n", PROJECT, optarg);
         return 1;
     }
     return 0;
@@ -310,7 +315,8 @@ static int indentation_mode(opt_t *result, char *optarg)
         result->indentmode = 'n';
     }
     else {
-        bx_fprintf(stderr, "%s: invalid indentation mode\n", PROJECT);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: invalid indentation mode\n", PROJECT);
         return 1;
     }
     return 0;
@@ -334,7 +340,8 @@ static int killblank(opt_t *result, char *optarg)
             result->killblank = 0;
         }
         else {
-            bx_fprintf(stderr, "%s: -k: invalid parameter\n", PROJECT);
+            // Instead of bx_fprintf, use function pointer
+            bx_fprintf_ptr(stderr, "%s: -k: invalid parameter\n", PROJECT);
             return 1;
         }
     }
@@ -403,7 +410,8 @@ static int padding(opt_t *result, char *optarg)
         }
     }
     if (errfl) {
-        bx_fprintf(stderr, "%s: invalid padding specification - %s\n", PROJECT, optarg);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: invalid padding specification - %s\n", PROJECT, optarg);
         return 1;
     }
     return 0;
@@ -450,7 +458,8 @@ static int size_of_box(opt_t *result, char *optarg)
         *p = 'x';
     }
     if (errno || (result->reqwidth == 0 && result->reqheight == 0) || result->reqwidth < 0 || result->reqheight < 0) {
-        bx_fprintf(stderr, "%s: invalid box size specification -- %s\n", PROJECT, optarg);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: invalid box size specification -- %s\n", PROJECT, optarg);
         return 1;
     }
     return 0;
@@ -469,7 +478,8 @@ static int tab_handling(opt_t *result, char *optarg)
     char *p;
     int width = (int) strtol(optarg, &p, 10);
     if (width < 1 || width > MAX_TABSTOP) {
-        bx_fprintf(stderr, "%s: invalid tab stop distance -- %d\n", PROJECT, width);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: invalid tab stop distance -- %d\n", PROJECT, width);
         return 1;
     }
     result->tabstop = width;
@@ -497,7 +507,8 @@ static int tab_handling(opt_t *result, char *optarg)
         }
     }
     if (errfl) {
-        bx_fprintf(stderr, "%s: invalid tab handling specification - %s\n", PROJECT, optarg);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: invalid tab handling specification - %s\n", PROJECT, optarg);
         return 1;
     }
     return 0;
@@ -542,7 +553,8 @@ static int input_output_files(opt_t *result, char *argv[], int optind)
     }
 
     else if (argv[optind + 1] && argv[optind + 2]) {         /* illegal third file */
-        bx_fprintf(stderr, "%s: illegal parameter -- %s\n", PROJECT, argv[optind + 2]);
+        // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: illegal parameter -- %s\n", PROJECT, argv[optind + 2]);
         usage_short(stderr);
         return 1;
     }
@@ -554,7 +566,8 @@ static int input_output_files(opt_t *result, char *argv[], int optind)
         else {
             result->infile = fopen(argv[optind], "r");
             if (result->infile == NULL) {
-                bx_fprintf(stderr, "%s: Can\'t open input file -- %s\n", PROJECT, argv[optind]);
+                // Instead of bx_fprintf, use function pointer
+        bx_fprintf_ptr(stderr, "%s: Can\'t open input file -- %s\n", PROJECT, argv[optind]);
                 return 9;                                    /* can't read infile */
             }
         }
@@ -807,7 +820,8 @@ opt_t *process_commandline(int argc, char *argv[])
                 break;
 
             default:
-                bx_fprintf(stderr, "%s: internal error\n", PROJECT);
+                // Instead of bx_fprintf, use function pointer
+                bx_fprintf_ptr(stderr, "%s: internal error\n", PROJECT);
                 BFREE(result);
                 return NULL;
         }
