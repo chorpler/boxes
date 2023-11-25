@@ -44,18 +44,35 @@ WIN_CMOCKA_DIR         = vendor/cmocka-$(WIN_CMOCKA_VERSION)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#    Detect platform (Apple's linker does not support --wrap)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+BOXES_PLATFORM := ""
+ifeq ($(OS),Windows_NT)
+	BOXES_PLATFORM := win32
+else
+	UNAME_S := $(shell sh -c 'uname -s 2>/dev/null || echo Unknown')
+	ifeq ($(UNAME_S),Darwin)
+		BOXES_PLATFORM := darwin
+	else
+		BOXES_PLATFORM := unix
+	endif
+endif
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #    Build
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 build cov debug: infomsg replaceinfos
-	$(MAKE) -C src BOXES_PLATFORM=unix LEX=$(LEX) YACC=$(YACC) $@
+	$(MAKE) -C src BOXES_PLATFORM=$(BOXES_PLATFORM) LEX=$(LEX) YACC=$(YACC) $@
 
 win32: infomsg replaceinfos
-	$(MAKE) -C src BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src LDFLAGS=-L../$(PCRE2_DIR)/.libs \
+	$(MAKE) -C src BOXES_PLATFORM=$(BOXES_PLATFORM) C_INCLUDE_PATH=../$(PCRE2_DIR)/src LDFLAGS=-L../$(PCRE2_DIR)/.libs \
 	    LEX=../$(WIN_FLEX_BISON_DIR)/win_flex.exe YACC=../$(WIN_FLEX_BISON_DIR)/win_bison.exe build
 
 win32.debug: infomsg replaceinfos
-	$(MAKE) -C src BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src LDFLAGS=-L../$(PCRE2_DIR)/.libs \
+	$(MAKE) -C src BOXES_PLATFORM=$(BOXES_PLATFORM) C_INCLUDE_PATH=../$(PCRE2_DIR)/src LDFLAGS=-L../$(PCRE2_DIR)/.libs \
 	    LEX=../$(WIN_FLEX_BISON_DIR)/win_flex.exe YACC=../$(WIN_FLEX_BISON_DIR)/win_bison.exe debug
 
 win32.prereq: $(PCRE2_DIR)/.libs/libpcre2-32.a vendor/win_flex_bison-$(WIN_FLEX_BISON_VERSION).zip \
@@ -155,7 +172,7 @@ $(OUT_DIR)/zip/$(PKG_NAME).zip:
 	@echo Windows ZIP file created at $(OUT_DIR)/zip/$(PKG_NAME).zip
 
 package: build
-	$(MAKE) BOXES_PLATFORM=unix $(PKG_NAME).tar.gz
+	$(MAKE) BOXES_PLATFORM=$(BOXES_PLATFORM) $(PKG_NAME).tar.gz
 
 win32.package: win32 $(OUT_DIR)/zip/$(PKG_NAME).zip
 
@@ -190,11 +207,11 @@ covtest:
 	cd test; ./testrunner.sh --suite --coverage
 
 utest:
-	$(MAKE) -C utest BOXES_PLATFORM=unix utest
+	$(MAKE) -C utest BOXES_PLATFORM=$(BOXES_PLATFORM) utest
 
 win32.utest: $(OUT_DIR)
 	cp $(WIN_CMOCKA_DIR)/bin/cmocka.dll $(OUT_DIR)/
-	$(MAKE) -C utest BOXES_PLATFORM=win32 C_INCLUDE_PATH=../$(PCRE2_DIR)/src:../$(WIN_CMOCKA_DIR)/include \
+	$(MAKE) -C utest BOXES_PLATFORM=$(BOXES_PLATFORM) C_INCLUDE_PATH=../$(PCRE2_DIR)/src:../$(WIN_CMOCKA_DIR)/include \
 	    LDFLAGS_ADDTL="-L../$(PCRE2_DIR)/.libs -L../$(WIN_CMOCKA_DIR)/lib" utest
 
 
