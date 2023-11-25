@@ -35,7 +35,6 @@ pcre2_code *compile_pattern(char *pattern)
 {
     uint32_t *ustr = u32_strconv_from_arg(pattern, CONFIG_FILE_ENCODING);
     if (ustr == NULL) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "Failed to convert pattern string to UTF-32 - \"%s\"\n", pattern);
         return NULL;
     }
@@ -62,7 +61,6 @@ pcre2_code *u32_compile_pattern(uint32_t *pattern)
     if (re == NULL) {
         PCRE2_UCHAR buffer[256];
         pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "Regular expression pattern \"%s\" failed to compile at position %d: %s\n",
                 u32_strconv_to_output(pattern), (int) erroroffset, u32_strconv_to_output(buffer));
     }
@@ -95,7 +93,6 @@ uint32_t *regex_replace(pcre2_code *search, char *replace, uint32_t *input, cons
 {
     uint32_t *ustr = u32_strconv_from_arg(replace, CONFIG_FILE_ENCODING);
     if (ustr == NULL) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "Failed to convert replacement string to UTF-32 - \"%s\"\n", replace);
         return NULL;
     }
@@ -150,7 +147,6 @@ uint32_t *u32_regex_replace(pcre2_code *search, uint32_t *replace, uint32_t *inp
         PCRE2_UCHAR buffer[256];
         pcre2_get_error_message(pcre2_rc, buffer, sizeof(buffer));
         /* buffer will normally contain "invalid replacement string" */
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "Error substituting \"%s\": %s\n", u32_strconv_to_output(replace),
                 u32_strconv_to_output(buffer));
         BFREE(output);

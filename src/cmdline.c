@@ -65,9 +65,7 @@ extern int optind;     /* for getopt() */
  */
 static void usage_short(FILE *st)
 {
-    // Instead of bx_fprintf, use function pointer
     bx_fprintf_ptr(st, "Usage: %s [options] [infile [outfile]]\n", PROJECT);
-    // Instead of bx_fprintf, use function pointer
     bx_fprintf_ptr(st, "Try `%s -h' for more information.\n", PROJECT);
 }
 
@@ -215,7 +213,6 @@ static int alignment(opt_t *result, char *optarg)
     }
 
     if (errfl) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: Illegal text format -- %s\n", PROJECT, optarg);
         return 1;
     }
@@ -233,7 +230,6 @@ static int alignment(opt_t *result, char *optarg)
 static int command_line_design(opt_t *result, char *optarg)
 {
     if (strlen(optarg) == 0) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: empty command line design definition\n", PROJECT);
         return 2;
     }
@@ -287,7 +283,6 @@ static int eol_override(opt_t *result, char *optarg)
         result->eol = "\r";
     }
     else {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: invalid eol spec -- %s\n", PROJECT, optarg);
         return 1;
     }
@@ -315,7 +310,6 @@ static int indentation_mode(opt_t *result, char *optarg)
         result->indentmode = 'n';
     }
     else {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: invalid indentation mode\n", PROJECT);
         return 1;
     }
@@ -340,7 +334,6 @@ static int killblank(opt_t *result, char *optarg)
             result->killblank = 0;
         }
         else {
-            // Instead of bx_fprintf, use function pointer
             bx_fprintf_ptr(stderr, "%s: -k: invalid parameter\n", PROJECT);
             return 1;
         }
@@ -410,7 +403,6 @@ static int padding(opt_t *result, char *optarg)
         }
     }
     if (errfl) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: invalid padding specification - %s\n", PROJECT, optarg);
         return 1;
     }
@@ -458,7 +450,6 @@ static int size_of_box(opt_t *result, char *optarg)
         *p = 'x';
     }
     if (errno || (result->reqwidth == 0 && result->reqheight == 0) || result->reqwidth < 0 || result->reqheight < 0) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: invalid box size specification -- %s\n", PROJECT, optarg);
         return 1;
     }
@@ -478,7 +469,6 @@ static int tab_handling(opt_t *result, char *optarg)
     char *p;
     int width = (int) strtol(optarg, &p, 10);
     if (width < 1 || width > MAX_TABSTOP) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: invalid tab stop distance -- %d\n", PROJECT, width);
         return 1;
     }
@@ -507,7 +497,6 @@ static int tab_handling(opt_t *result, char *optarg)
         }
     }
     if (errfl) {
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: invalid tab handling specification - %s\n", PROJECT, optarg);
         return 1;
     }
@@ -553,7 +542,6 @@ static int input_output_files(opt_t *result, char *argv[], int optind)
     }
 
     else if (argv[optind + 1] && argv[optind + 2]) {         /* illegal third file */
-        // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: illegal parameter -- %s\n", PROJECT, argv[optind + 2]);
         usage_short(stderr);
         return 1;
@@ -566,7 +554,6 @@ static int input_output_files(opt_t *result, char *argv[], int optind)
         else {
             result->infile = fopen(argv[optind], "r");
             if (result->infile == NULL) {
-                // Instead of bx_fprintf, use function pointer
         bx_fprintf_ptr(stderr, "%s: Can\'t open input file -- %s\n", PROJECT, argv[optind]);
                 return 9;                                    /* can't read infile */
             }
@@ -820,7 +807,6 @@ opt_t *process_commandline(int argc, char *argv[])
                 break;
 
             default:
-                // Instead of bx_fprintf, use function pointer
                 bx_fprintf_ptr(stderr, "%s: internal error\n", PROJECT);
                 BFREE(result);
                 return NULL;
