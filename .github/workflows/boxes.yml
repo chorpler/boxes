@@ -45,3 +45,37 @@ jobs:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   file: out/lcov-total.info
                   format: lcov
+
+    build-mac:
+        runs-on: macos-latest
+        env:
+          LEX: /usr/local/opt/flex/bin/flex
+          YACC: /usr/local/opt/bison/bin/bison
+        steps:
+            - uses: actions/checkout@v3
+
+            # We need to use GNU grep, sed, and xargs on macOS
+            - name: add-packages
+              run: |
+                  brew install flex bison diffutils lcov cmocka grep gnu-sed findutils
+                  echo '/usr/local/opt/grep/libexec/gnubin' >> $GITHUB_PATH
+                  echo '/usr/local/opt/gnu-sed/libexec/gnubin' >> $GITHUB_PATH
+                  echo '/usr/local/opt/findutils/libexec/gnubin' >> $GITHUB_PATH
+
+            - name: make cov
+              run: make cov
+
+            # This uses ld --wrap to mock the cmocka functions but
+            # macOS ld does not support --wrap
+            #- name: Run white-box tests
+              #run: make utest
+
+            - name: Run black-box tests
+              run: make covtest
+
+            - name: Coveralls
+              uses: coverallsapp/github-action@v2
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  file: out/lcov-total.info
+                  format: lcov

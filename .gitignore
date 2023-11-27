@@ -16,6 +16,8 @@
 .cproject
 .project
 /.idea/
+/.vscode/
+/.history/
 /coverage/
 /cmake-build-debug/
 
@@ -39,7 +41,7 @@
 /vendor/
 /datagen/
 /build/
-CMakeUserPresets.json
+*.swp
 
 # Legacy locations of generated files (no longer in use)
 /src/boxes
@@ -58,6 +60,9 @@ CMakeUserPresets.json
 /tools/LICENSE.txt
 /boxes.portable.*.nupkg
 *.nupkg.zip
+
+# MacOS
+.DS_Store
 
 # Misc
 /vs

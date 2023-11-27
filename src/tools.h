@@ -50,6 +50,20 @@
 
 
 /**
+ * Define type for a function pointer to specify which `bx_fprintf` function
+ * will be called. This enables unit testing on MacOS, since Apple's `ld`
+ * linker does not support the `--wrap` flag that GNU `ld` does.
+ */
+typedef void (*bx_fprintf_t)(FILE *stream, const char *format, ...);
+
+
+/**
+ * Declare function pointer to be changed when running unit tests
+ */
+extern bx_fprintf_t bx_fprintf;
+
+
+/**
  * Return true (1) if line is empty.
  * Empty lines either consist entirely of whitespace or don't exist.
  * @param line the line to check
@@ -211,8 +225,13 @@ char *bx_strndup(const char *s, size_t n);
  * @param stream Where to print, for example `stderr`
  * @param format the format string, followed by the arguments of the format string
  */
-void bx_fprintf(FILE *stream, const char *format, ...);
+void bx_fprintf_original(FILE *stream, const char *format, ...);
 
+
+/**
+ * Set the bx_fprintf_ptr function pointer to point to a specific function
+ */
+void set_bx_fprintf(bx_fprintf_t bx_fprintf_function);
 
 /**
  * Determine if the given string is an "ASCII ID", which means:
